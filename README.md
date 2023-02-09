@@ -38,3 +38,20 @@ func VerifyTypedDataSignature(
 	signature []byte,
 	client *ethclient.Client) (bool, error)
 ```
+
+Before use this module, you need to get the module first.
+```sh
+go get -u github.com/unipassid/unipass-sigverify-go@v0.9.0
+```
+and then you can import this module and use it.
+
+```go
+import (
+	unipass_sigverify "github.com/unipassid/unipass-sigverify-go"
+)
+
+ok, err := unipass_sigverify.VerifyMessageSignature(ctx, account, msg, sig, false, client)
+
+ok, err := unipass_sigverify.VerifyTypedDataSignature(ctx, account, typedData, sig, client)
+```
+for more detailed information, you can see the testcode `methods_test.go`.
