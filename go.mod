@@ -1,4 +1,4 @@
-module unipass-sigverify-go
+module github.com/unipassid/unipass-sigverify-go
 
 go 1.18
 
