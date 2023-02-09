@@ -83,28 +83,48 @@ func VerifySignature(
 	return false, errors.New("signature verify failed")
 }
 
+//  Verify ethereum account signature, including EOA account and Contract account.
+// - parameter
+//  - param ctx
+//  - param account: account address.
+//  - param message.
+//  - param signature.
+//  - param isEIP191Prefix boolean: Does the personal hash algorithm use EIP191 prefix.
+//                       There are two message prefix for personal hash algorithm during signing:
+//                                    - EIP191Prefix: `\x19Ethereum Signed Message:\n`
+//                                    - UniPassPrefix: `\x18UniPass Signed Message:\n`
+//   - param client: optional param, for contract signature validation
+//   - returns signature validation result and error message
 func VerifyMessageSignature(
 	ctx context.Context,
 	account common.Address,
-	msg, sig []byte,
+	message, signature []byte,
 	isEIP191 bool,
 	client *ethclient.Client) (bool, error) {
 	msgHash := [32]byte{}
 	if isEIP191 {
-		messageHash := EIP191HashMessage(msg)
+		messageHash := EIP191HashMessage(message)
 		copy(msgHash[:], messageHash)
 	} else {
-		messageHash := UnipassHashMessage(msg)
+		messageHash := UnipassHashMessage(message)
 		copy(msgHash[:], messageHash)
 	}
-	return VerifySignature(ctx, account, msgHash, sig, client)
+	return VerifySignature(ctx, account, msgHash, signature, client)
 }
 
-func VerifySignedTypedData(
+//  Verify typedData signature, including EOA account and Contract account.
+// - parameter
+//  - param ctx
+//  - param account: account address.
+//  - param data.
+//  - param signature.
+//  - param client: optional param, for contract signature validation
+//  - returns signature validation result and error message
+func VerifyTypedDataSignature(
 	ctx context.Context,
 	account common.Address,
 	data apitypes.TypedData,
-	sig []byte,
+	signature []byte,
 	client *ethclient.Client) (bool, error) {
 	msgHash := [32]byte{}
 	messageHash, _, err := apitypes.TypedDataAndHash(data)
@@ -112,5 +132,5 @@ func VerifySignedTypedData(
 		return false, err
 	}
 	copy(msgHash[:], messageHash)
-	return VerifySignature(ctx, account, msgHash, sig, client)
+	return VerifySignature(ctx, account, msgHash, signature, client)
 }

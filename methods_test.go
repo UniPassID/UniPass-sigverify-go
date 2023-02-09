@@ -69,7 +69,7 @@ func TestVerifySignedTypeData(t *testing.T) {
 				},
 			}
 		sig := common.FromHex("0x0000018e9e9a0bd86c21c33ad96c875f976b9c9fdb78a110536d9b09b74e9d985d2eb04da24f23a78e4c9f281ecdd8869f50a2b5b4e18e4ec78cfcedf3ff3a973fb5dc1c020000003c000000640000000002007e7649ccd0315628dabe5256cd050d4ce7e1824d1217dba20cc5e3e5626553970000003c000000000000003c0000c06495b106de8a0701ff5e84d9f8a5c9d711b1b6000000280000000000000000")
-		ok, err := VerifySignedTypedData(ctx, account, data, sig, client)
+		ok, err := VerifyTypedDataSignature(ctx, account, data, sig, client)
 		if err != nil || !ok {
 			t.Fatalf("validate signature error:%s", err)
 		}
